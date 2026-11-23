@@ -17,6 +17,11 @@ OUTPUT_PATH = "/output/entry.txt"
 
 def main() -> None:
     text = JOKE.strip()
+    # Competition contract: exactly one line, 1-280 code points. A stray
+    # newline would split the entry into two lines, so reject it outright
+    # instead of silently writing a malformed entry.
+    if "\n" in text or "\r" in text:
+        raise ValueError("entry must be a single line, got embedded newline")
     if not 1 <= len(text) <= 280:
         raise ValueError(
             "entry must be 1 to 280 characters, got %d" % len(text)
